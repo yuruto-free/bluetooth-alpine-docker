@@ -1,4 +1,4 @@
-FROM alpine:3.15
+FROM alpine:3.11
 
 ENV PYTHONUNBUFFERED=1 \
     APP_ROOT_PATH=/code \
@@ -6,8 +6,9 @@ ENV PYTHONUNBUFFERED=1 \
 
 RUN    apk update \
     && apk add --no-cache bash tzdata python3 \
-    && apk add --no-cache pulseaudio pulseaudio-utils alsa-utils alsa-lib-dev \
+    && apk add --no-cache pulseaudio pulseaudio-utils alsa-utils alsa-lib-dev udev \
                           bluez dbus dbus-dev pulseaudio-bluez libpulse openrc \
+    && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing bluez-alsa \
     && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
     && ln -sf python3 /usr/bin/python \
     && python3 -m ensurepip \
@@ -21,6 +22,7 @@ RUN    apk update \
     && apk --purge del .build-deps \
     && mkdir -p ${AUDIO_ROOT_PATH} \
     && mkdir -p ${APP_ROOT_PATH} \
+    && mkdir -p /etc/dbus-1/system.d \
     && rm -rf /root/.cache /var/cache/apk/*
 
 COPY start.sh /start.sh
