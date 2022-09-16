@@ -2,7 +2,7 @@
 
 ## Preparation
 ### Required
-* Execute docker by root user Because this container is used to `/run/dbus/system_bus_socket`.
+* Execute docker by root user Because this container uses `/run/dbus/system_bus_socket`.
 * Support 64 bit architecture only
 
 ### Build
@@ -13,7 +13,7 @@ docker-compose build
 ```
 
 ### Check bluetooth connection
-Enter the bluetooth-environment container, then execute `bluetoothctl` command, i.e. type this command in host environment, then execute the following commands in docker container.
+First, type this command in host environment. Next, execute the following commands in docker container.
 
 ```sh
 # In host environment
@@ -65,14 +65,14 @@ docker-compose up -d
     curl -X GET -H "Content-Type: application/json; charset=utf-8" -d '{"command":"list"}' http://localhost:10650
     ```
 
-* In same environment, when you execute the following command, you can stop the playing music.
+* In the host environment, when you execute the following command, you can stop the playing music.
 
     ```sh
     curl -X GET -H "Content-Type: application/json; charset=utf-8" -d '{"command":"stop"}' http://localhost:10650
     ```
 
 ### POST Request
-In the host environment, when you execute the following command, you can start playing specified music.
+In the host environment, when you execute the following command, you can play the specified music.
 
     ```sh
     curl -X POST -H "Content-Type: application/json; charset=utf-8" -d '{"filename":"wav-filename"}' http://localhost:10650
