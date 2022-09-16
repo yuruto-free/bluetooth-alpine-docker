@@ -1,6 +1,10 @@
 # bluetooth speaker environment using alpine image in docker
 
 ## Preparation
+### Required
+* Execute docker by root user Because this container is used to `/run/dbus/system_bus_socket`.
+* Support 64 bit architecture only
+
 ### Build
 Run the following command:
 
@@ -51,4 +55,16 @@ Run the following command.
 
 ```sh
 docker-compose up -d
+```
+
+## Debug environment
+```sh
+# lsb_release -a
+Distributor ID: Debian
+Description:    Debian GNU/Linux 11 (bullseye)
+Release:        11
+Codename:       bullseye
+
+# arch
+aarch64
 ```
