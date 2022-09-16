@@ -2,7 +2,7 @@
 
 ## Preparation
 ### Required
-* Execute docker by root user Because this container is used to `/run/dbus/system_bus_socket`.
+* Should execute docker by root user because this container uses `/run/dbus/system_bus_socket`.
 * Support 64 bit architecture only
 
 ### Build
@@ -13,12 +13,16 @@ docker-compose build
 ```
 
 ### Check bluetooth connection
-Enter the bluetooth-environment container, then execute `bluetoothctl` command, i.e. type this command in host environment, then execute the following commands in docker container.
+First, execute the following command in host environment.
 
 ```sh
 # In host environment
 docker-compose run --rm bluetooth-environment bash
+```
 
+Next, execute the following commands in docker container.
+
+```sh
 # In docker container
 # Step1: execute this command
 bluetoothctl
@@ -56,6 +60,28 @@ Run the following command.
 ```sh
 docker-compose up -d
 ```
+
+## Usage
+### GET Request
+* In the host environment, when you execute the following command, you can get wav file list.
+
+    ```sh
+    curl -X GET -H "Content-Type: application/json; charset=utf-8" -d '{"command":"list"}' http://localhost:10650
+    ```
+
+* In the host environment, when you execute the following command, you can stop the playing music.
+
+    ```sh
+    curl -X GET -H "Content-Type: application/json; charset=utf-8" -d '{"command":"stop"}' http://localhost:10650
+    ```
+
+### POST Request
+In the host environment, when you execute the following command, you can play the specified music.
+
+    ```sh
+    curl -X POST -H "Content-Type: application/json; charset=utf-8" -d '{"filename":"target-wav-filename.wav"}' http://localhost:10650
+    # Required: exist file in `audiofiles` directory.
+    ```
 
 ## Debug environment
 ```sh
