@@ -39,13 +39,13 @@ sleep 2
 # run bluealsa-aplay
 bluealsa-aplay ${BLUETOOTH_SPEAKER} &
 pid_aplay="$!"
+bluetoothctl connect ${BLUETOOTH_SPEAKER}
+sleep 1
+# setup volume
+amixer -D bluealsa | grep Simple | grep -oP "'(?<=').*(?=')'" | xargs -I{} amixer -D bluealsa sset {} ${MAX_VOLUME}
 # run server
 python -u ${APP_ROOT_PATH}/server.py &
 pid_server="$!"
-bluetoothctl connect ${BLUETOOTH_SPEAKER}
-sleep 2
-# setup volume
-amixer -D bluealsa | grep Simple | grep -oP "'(?<=').*(?=')'" | xargs -I{} amixer -D bluealsa sset {} ${MAX_VOLUME}
 
 wait ${pid_bluealsa}
 wait ${pid_aplay}
