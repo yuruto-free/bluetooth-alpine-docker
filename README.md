@@ -57,6 +57,27 @@ Run the following command.
 docker-compose up -d
 ```
 
+## Usage
+### GET Request
+* In the host environment, when you execute the following command, you can get wav file list.
+
+    ```sh
+    curl -X GET -H "Content-Type: application/json; charset=utf-8" -d '{"command":"list"}' http://localhost:10650
+    ```
+
+* In same environment, when you execute the following command, you can stop the playing music.
+
+    ```sh
+    curl -X GET -H "Content-Type: application/json; charset=utf-8" -d '{"command":"stop"}' http://localhost:10650
+    ```
+
+### POST Request
+In the host environment, when you execute the following command, you can start playing specified music.
+
+    ```sh
+    curl -X POST -H "Content-Type: application/json; charset=utf-8" -d '{"filename":"wav-filename"}' http://localhost:10650
+    ```
+
 ## Debug environment
 ```sh
 # lsb_release -a
