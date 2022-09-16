@@ -1,0 +1,33 @@
+version: '3.7'
+
+x-logging:
+  &json-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  bluetooth-environment:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: bluetooth.environment
+    restart: "no"
+    container_name: bluetooth-environment
+    env_file:
+        - ./.env
+    environment:
+      SERVER_PORT: 10650
+    logging: *json-logging
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - ./src:/code:ro
+      - ./audiofiles:/audiofiles:ro
+      - ./config/additional-system.pa:/etc/pulse/system.pa.d/additional-system.pa:ro
+      - ./config/bluealsa.conf:/etc/dbus-1/system.d/bluealsa.conf:ro
+      - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
+    devices:
+      - /dev/ttyAMA0:/dev/ttyAMA0
