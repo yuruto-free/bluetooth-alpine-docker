@@ -13,8 +13,10 @@ services:
       context: ./
       dockerfile: Dockerfile
     image: bluetooth.environment
-    restart: always
+    restart: "no"
     container_name: bluetooth-environment
+    env_file:
+        - ./.env
     environment:
       SERVER_PORT: 10650
     logging: *json-logging
@@ -24,6 +26,8 @@ services:
     volumes:
       - ./src:/code:ro
       - ./audiofiles:/audiofiles:ro
+      - ./config/additional-system.pa:/etc/pulse/system.pa.d/additional-system.pa:ro
+      - ./config/bluealsa.conf:/etc/dbus-1/system.d/bluealsa.conf:ro
       - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
     devices:
       - /dev/ttyAMA0:/dev/ttyAMA0
