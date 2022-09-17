@@ -100,7 +100,7 @@ class PlayAudio():
                 ret = list(map(lambda x: x.replace('{}/'.format(self.__root_dir), ''), out))
             elif 'stop' == command:
                 self.__player.stop()
-                ret = ['[info]Music Stopped']
+                ret = ['Music Stopped']
             else:
                 ret = []
 
