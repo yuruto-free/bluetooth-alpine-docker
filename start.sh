@@ -9,9 +9,14 @@ function handler(){
     wait ${pid_server}
 }
 
+
+# ============
+# main routine
+# ============
+# setup handler
 trap handler SIGTERM
 
-# create asoundrc
+# create asoundrc.conf file
 cat <<- _EOF_ > /etc/asound.conf
 defaults.bluealsa.device "${BLUETOOTH_SPEAKER}"
 defaults.bluealsa.profile "${BLUEALSA_PROFILE}"
@@ -27,9 +32,6 @@ pcm.!default {
 }
 _EOF_
 
-# ============
-# main routine
-# ============
 # run pulseaudio
 pulseaudio -D --exit-idle-time=-1 -v --log-target=stderr --log-level=4
 # run bluealsa
@@ -39,8 +41,8 @@ sleep 2
 # run bluealsa-aplay
 bluealsa-aplay ${BLUETOOTH_SPEAKER} &
 pid_aplay="$!"
+sleep 2
 bluetoothctl connect ${BLUETOOTH_SPEAKER}
-sleep 1
 # setup volume
 amixer -D bluealsa | grep Simple | grep -oP "'(?<=').*(?=')'" | xargs -I{} amixer -D bluealsa sset {} ${MAX_VOLUME}
 # run server

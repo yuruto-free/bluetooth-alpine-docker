@@ -9,6 +9,9 @@
 Run the following command:
 
 ```sh
+# optional: delete old image
+docker images | grep none | awk '{print $3;}' | xargs -I{} docker rmi {}
+# build
 docker-compose build
 ```
 
@@ -16,14 +19,18 @@ docker-compose build
 First, execute the following command in host environment.
 
 ```sh
+# ===================
 # In host environment
+# ===================
 docker-compose run --rm bluetooth-environment bash
 ```
 
 Next, execute the following commands in docker container.
 
 ```sh
+# ===================
 # In docker container
+# ===================
 # Step1: execute this command
 bluetoothctl
 # Step2: agent on
@@ -50,7 +57,7 @@ Create a `.env` file in host environment. A sample file is following below:
 
 ```sh
 BLUETOOTH_SPEAKER=your-bluetooth-speaker-mac-addresses
-BLUEALSA_PROFILE=a2dp   # a2dp or sco: depend on your environment
+BLUEALSA_PROFILE=a2dp   # a2dp or sco: depends on your environment
 MAX_VOLUME=70%
 ```
 
@@ -82,8 +89,33 @@ In the host environment, when you execute the following command, you can play th
     curl -X POST -H "Content-Type: application/json; charset=utf-8" -d '{"filename":"target-wav-filename.wav"}' http://localhost:10650
     # Required: exist file in `audiofiles` directory.
     ```
+## Troubleshooting
+* `bluealsa` does not work
+    * In your host environment, create the following file in `/etc/dbus-1/system.d/bluealsa.conf`
 
-## Debug environment
+        ```sh
+        <!-- This configuration file specifies the required security policies
+             for BlueALSA core daemon to work. -->
+
+        <!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+         "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+        <busconfig>
+
+          <!-- ../system.conf have denied everything, so we just punch some holes -->
+
+          <policy user="root">
+            <allow own_prefix="org.bluealsa"/>
+            <allow send_destination="org.bluealsa"/>
+          </policy>
+
+          <policy group="audio">
+            <allow send_destination="org.bluealsa"/>
+          </policy>
+
+        </busconfig>
+        ```
+
+## Test environment
 ```sh
 # lsb_release -a
 Distributor ID: Debian
